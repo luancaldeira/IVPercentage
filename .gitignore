@@ -1,0 +1,14 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+
+# Test / tooling artifacts
+.playwright-mcp/
+*.output
+
+# OS
+Thumbs.db
+.DS_Store
