@@ -33,3 +33,24 @@ test('classifyPixel: branco do card = OTHER', () => {
 test('classifyPixel: gradiente amarelo claro do card = OTHER', () => {
   assert.strictEqual(IV.classifyPixel(245, 240, 216), 'OTHER');
 });
+
+test('fillRatioToIV: tudo preenchido = 15', () => {
+  assert.strictEqual(IV.fillRatioToIV(300, 0), 15);
+});
+
+test('fillRatioToIV: tudo vazio = 0', () => {
+  assert.strictEqual(IV.fillRatioToIV(0, 300), 0);
+});
+
+test('fillRatioToIV: metade ~ 7 ou 8', () => {
+  const v = IV.fillRatioToIV(150, 150);
+  assert.ok(v === 7 || v === 8, `got ${v}`);
+});
+
+test('fillRatioToIV: sem pixels de barra = null', () => {
+  assert.strictEqual(IV.fillRatioToIV(0, 0), null);
+});
+
+test('fillRatioToIV: nunca passa de 15', () => {
+  assert.strictEqual(IV.fillRatioToIV(1000, 0), 15);
+});

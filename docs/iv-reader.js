@@ -25,7 +25,15 @@
     return 'OTHER';
   }
 
-  const api = { rgbToHsv, classifyPixel };
+  function clamp(n, lo, hi) { return Math.max(lo, Math.min(hi, n)); }
+
+  function fillRatioToIV(warm, track) {
+    const total = warm + track;
+    if (total === 0) return null;
+    return clamp(Math.round((warm / total) * 15), 0, 15);
+  }
+
+  const api = { rgbToHsv, classifyPixel, fillRatioToIV };
 
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else global.IVReader = api;
