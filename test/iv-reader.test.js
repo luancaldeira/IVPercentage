@@ -118,3 +118,32 @@ test('detectBars: imagem sem barras = ok:false', () => {
   const r = IV.detectBars({ width, height, data });
   assert.strictEqual(r.ok, false);
 });
+
+test('lerIVdeImageData: hundo 15/15/15', () => {
+  const r = IV.lerIVdeImageData(makeAppraisal([15, 15, 15]));
+  assert.strictEqual(r.ok, true, r.motivo);
+  assert.deepStrictEqual([r.atk, r.def, r.sta], [15, 15, 15]);
+});
+
+test('lerIVdeImageData: ataque zero', () => {
+  const r = IV.lerIVdeImageData(makeAppraisal([0, 8, 11]));
+  assert.strictEqual(r.ok, true, r.motivo);
+  assert.strictEqual(r.atk, 0);
+  assert.ok(Math.abs(r.def - 8) <= 1, `def ${r.def}`);
+  assert.ok(Math.abs(r.sta - 11) <= 1, `sta ${r.sta}`);
+});
+
+test('lerIVdeImageData: valores variados dentro de +-1', () => {
+  const truth = [13, 7, 2];
+  const r = IV.lerIVdeImageData(makeAppraisal(truth));
+  assert.strictEqual(r.ok, true, r.motivo);
+  [r.atk, r.def, r.sta].forEach((v, i) =>
+    assert.ok(Math.abs(v - truth[i]) <= 1, `stat ${i}: ${v} vs ${truth[i]}`));
+});
+
+test('lerIVdeImageData: imagem invalida = ok:false', () => {
+  const width = 200, height = 200;
+  const data = new Uint8ClampedArray(width * height * 4).fill(255);
+  const r = IV.lerIVdeImageData({ width, height, data });
+  assert.strictEqual(r.ok, false);
+});

@@ -130,7 +130,31 @@
     return { ok: true, masks, bands: bandsOut };
   }
 
-  const api = { rgbToHsv, classifyPixel, fillRatioToIV, detectBars };
+  function measureFill(masks, band) {
+    const { warm, track, width } = masks;
+    let w = 0, t = 0;
+    for (let y = band.y0; y <= band.y1; y++)
+      for (let x = band.x0; x <= band.x1; x++) {
+        const p = y * width + x;
+        if (warm[p]) w++;
+        else if (track[p]) t++;
+      }
+    return { w, t };
+  }
+
+  function lerIVdeImageData(img) {
+    const det = detectBars(img);
+    if (!det.ok) return { ok: false, motivo: det.motivo };
+    const [a, d, s] = det.bands.map(band => {
+      const { w, t } = measureFill(det.masks, band);
+      return fillRatioToIV(w, t);
+    });
+    if (a === null || d === null || s === null)
+      return { ok: false, motivo: 'barra vazia de pixels' };
+    return { ok: true, atk: a, def: d, sta: s };
+  }
+
+  const api = { rgbToHsv, classifyPixel, fillRatioToIV, detectBars, lerIVdeImageData };
 
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else global.IVReader = api;
