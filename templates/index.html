@@ -23,6 +23,10 @@
   --decent:#ffc24b;
   --poor:#ff5d6c;
   --accent:var(--great);
+  /* barras de IV estilo Pokémon GO: vermelho fixo, como a appraisal do jogo */
+  --iv-track:rgba(120,140,175,.15);
+  --iv-bar-hi:#ff7363;
+  --iv-bar-lo:#e5392b;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
@@ -140,18 +144,24 @@ kbd{font-family:"JetBrains Mono";font-size:10px;color:var(--muted);border:1px so
   min-width:48px;text-align:right}
 .iv-val small{color:var(--muted);font-size:12px;font-weight:500}
 
-.iv-seg{display:flex;gap:3px;margin-bottom:9px;height:12px}
-.iv-seg span{flex:1;background:rgba(99,140,210,.12);border-radius:2px;transition:background .2s, box-shadow .2s}
-.iv-seg span.on{background:var(--accent);box-shadow:0 0 8px color-mix(in srgb,var(--accent) 60%,transparent)}
+.iv-seg{display:flex;gap:2px;margin-bottom:10px;height:18px;padding:2px;border-radius:11px;
+  background:rgba(8,13,28,.5);border:1px solid rgba(120,140,175,.12)}
+.iv-seg span{flex:1;background:var(--iv-track);transition:background .18s, box-shadow .18s}
+.iv-seg span:first-child{border-radius:8px 0 0 8px}
+.iv-seg span:last-child{border-radius:0 8px 8px 0}
+.iv-seg span.on{background:linear-gradient(180deg,var(--iv-bar-hi),var(--iv-bar-lo));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.28)}
+.iv-seg.max span.on{background:linear-gradient(180deg,#ffa24d,#ff4d2b);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 0 10px rgba(255,90,45,.55)}
 
 input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:5px;border-radius:5px;
   background:rgba(99,140,210,.18);outline:none;cursor:pointer}
 input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;
-  background:var(--accent);border:3px solid #05070f;cursor:grab;
-  box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 35%,transparent),0 0 16px color-mix(in srgb,var(--accent) 70%,transparent);
+  background:#f2493c;border:3px solid #05070f;cursor:grab;
+  box-shadow:0 0 0 3px rgba(242,73,60,.35),0 0 16px rgba(242,73,60,.6);
   transition:transform .15s}
 input[type=range]::-webkit-slider-thumb:active{cursor:grabbing;transform:scale(1.15)}
-input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:var(--accent);
+input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:#f2493c;
   border:3px solid #05070f;cursor:grab}
 
 .total{margin-top:24px;display:flex;align-items:baseline;gap:10px;
@@ -301,6 +311,7 @@ function render(){
   [["atk",a],["def",d],["sta",s]].forEach(([k,v])=>{
     $("v-"+k).innerHTML=v+"<small>/15</small>";
     [...$("seg-"+k).children].forEach((el,i)=>el.classList.toggle("on",i<v));
+    $("seg-"+k).classList.toggle("max",v===15);
   });
   const total=a+d+s, pct=Math.round((total/45)*1000)/10;
   const tier=tierFor(pct);
