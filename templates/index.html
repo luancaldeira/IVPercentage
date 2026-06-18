@@ -194,6 +194,15 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
 
 .footer{margin-top:26px;text-align:center;font-size:10px;letter-spacing:.18em;color:var(--muted);text-transform:uppercase}
 .footer b{color:var(--cyan)}
+.scan-print{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:22px}
+.scan-btn{display:inline-flex;align-items:center;gap:8px;cursor:pointer;
+  background:rgba(39,224,232,.1);border:1px solid rgba(39,224,232,.4);color:var(--ink);
+  font-family:"Chakra Petch",sans-serif;letter-spacing:.04em;padding:12px 18px;border-radius:11px;
+  transition:border-color .25s,box-shadow .25s}
+.scan-btn:hover{border-color:rgba(39,224,232,.7);box-shadow:0 0 0 4px rgba(39,224,232,.08)}
+.scan-msg{font-size:12px;color:var(--muted);letter-spacing:.04em}
+.scan-msg.err{color:var(--poor)}
+.scan-preview{height:64px;border-radius:8px;border:1px solid var(--line)}
 </style>
 </head>
 <body>
@@ -213,6 +222,15 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
       <kbd>↑↓ ↵</kbd>
     </div>
     <ul id="results"></ul>
+  </div>
+
+  <div class="scan-print">
+    <label class="scan-btn">
+      📷 Ler print da appraisal
+      <input id="file" type="file" accept="image/*" hidden>
+    </label>
+    <span id="scan-msg" class="scan-msg"></span>
+    <img id="scan-preview" class="scan-preview" alt="" hidden>
   </div>
 
   <section class="readout" id="readout">
@@ -266,6 +284,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
   <div class="footer">Dataset local · <b>pokemon.csv</b> · cálculo = (atk+def+vida) / 45</div>
 </main>
 
+<script src="/iv-reader.js"></script>
 <script>
 const TYPE_COLORS={Normal:"#9098a1",Fire:"#ff6b3d",Water:"#4a90ff",Electric:"#ffcb2e",Grass:"#46c763",
 Ice:"#74d3e3",Fighting:"#e0405a",Poison:"#a956d6",Ground:"#e0a44a",Flying:"#8fa9ff",Psychic:"#ff5b94",
@@ -373,6 +392,37 @@ fetch("/api/pokemon").then(r=>r.json()).then(data=>{
   POKEMON=data;
   $("count").textContent=data.length+" espécies";
 }).catch(()=>{$("count").textContent="erro ao carregar";});
+
+// ---- ler IV de print ----
+function aplicarIV(atk, def, sta){
+  $("s-atk").value = atk; $("s-def").value = def; $("s-sta").value = sta;
+  $("readout").classList.add("live");
+  render();
+}
+$("file").addEventListener("change", e => {
+  const f = e.target.files[0];
+  if(!f) return;
+  const msg = $("scan-msg"); msg.classList.remove("err");
+  msg.textContent = "Lendo print…";
+  const url = URL.createObjectURL(f);
+  const im = new Image();
+  im.onload = () => {
+    const W = 750, H = Math.round(im.height * (750 / im.width));
+    const c = document.createElement("canvas"); c.width = W; c.height = H;
+    c.getContext("2d").drawImage(im, 0, 0, W, H);
+    const r = IVReader.lerIVdoCanvas(c);
+    const prev = $("scan-preview"); prev.src = url; prev.hidden = false;
+    if(r.ok){
+      aplicarIV(r.atk, r.def, r.sta);
+      msg.textContent = `Lido: ${r.atk}/${r.def}/${r.sta} — confira nos controles.`;
+    } else {
+      msg.classList.add("err");
+      msg.textContent = "Não consegui ler o print. Ajusta manual nos controles.";
+    }
+  };
+  im.onerror = () => { msg.classList.add("err"); msg.textContent = "Imagem inválida."; };
+  im.src = url;
+});
 
 render();
 </script>

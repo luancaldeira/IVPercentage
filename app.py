@@ -8,7 +8,7 @@ import ast
 import os
 
 import pandas as pd
-from flask import Flask, jsonify, render_template
+from flask import Flask, jsonify, render_template, send_from_directory
 
 from iv_calculator import porcentagem  # fonte canônica do cálculo (PRD)
 
@@ -64,6 +64,13 @@ def api_calc(atk, dfs, sta):
             return jsonify({"error": "IV fora do intervalo 0-15"}), 400
     pct = porcentagem(atk, dfs, sta)
     return jsonify({"total": atk + dfs + sta, "percentage": round(pct, 1)})
+
+
+@app.route("/iv-reader.js")
+def iv_reader_js():
+    """Serve o detector (fonte única, compartilhada com o build estático)."""
+    return send_from_directory(os.path.join(BASE, "docs"), "iv-reader.js",
+                               mimetype="application/javascript")
 
 
 if __name__ == "__main__":
