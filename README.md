@@ -24,6 +24,18 @@ porcentagem = (ataque + defesa + vida) / 45 * 100
 | Bom       | 51–66%    |
 | Fraco     | 0–50%     |
 
+## Ler IV por print
+
+Na interface web dá pra clicar em **📷 Ler print da appraisal** e enviar um
+screenshot da tela de avaliação do Pokémon GO. O programa mede o preenchimento
+das 3 barras (Ataque/Defesa/Vida) — mesmo sem os números aparecerem na tela — e
+preenche os controles automaticamente. Os sliders servem de conferência: ajuste
+se a leitura sair errada.
+
+Detalhes técnicos: leitura 100% no navegador (`docs/iv-reader.js`), sem servidor
+nem upload pra lugar nenhum. Testes em `test/iv-reader.test.js` (`node --test`) e
+`samples/iv-test.html` (integração contra prints reais em `samples/`).
+
 ## Como rodar
 
 Requisitos: Python 3, dataset `pokemon.csv` na raiz.
@@ -52,6 +64,11 @@ python iv_calculator.py
 ├── iv_calculator.py   # CLI + função porcentagem (canônica)
 ├── templates/
 │   └── index.html     # interface web
+├── docs/
+│   ├── index.html     # build estático (GitHub Pages)
+│   └── iv-reader.js   # leitor de IV por print (client-side)
+├── samples/           # prints reais + gabarito (expected.json) p/ teste
+├── test/              # testes unitários (node --test)
 ├── pokemon.csv        # dataset (coluna usada: pokemon_name, type, pokemon_id)
 └── requirements.txt
 ```
