@@ -411,7 +411,9 @@ $("file").addEventListener("change", e => {
     const c = document.createElement("canvas"); c.width = W; c.height = H;
     c.getContext("2d").drawImage(im, 0, 0, W, H);
     const r = IVReader.lerIVdoCanvas(c);
-    const prev = $("scan-preview"); prev.src = url; prev.hidden = false;
+    const prev = $("scan-preview");
+    prev.onload = () => URL.revokeObjectURL(url);
+    prev.src = url; prev.hidden = false;
     if(r.ok){
       aplicarIV(r.atk, r.def, r.sta);
       msg.textContent = `Lido: ${r.atk}/${r.def}/${r.sta} — confira nos controles.`;
@@ -420,7 +422,7 @@ $("file").addEventListener("change", e => {
       msg.textContent = "Não consegui ler o print. Ajusta manual nos controles.";
     }
   };
-  im.onerror = () => { msg.classList.add("err"); msg.textContent = "Imagem inválida."; };
+  im.onerror = () => { URL.revokeObjectURL(url); msg.classList.add("err"); msg.textContent = "Imagem inválida."; };
   im.src = url;
 });
 
