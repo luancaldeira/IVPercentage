@@ -1,0 +1,17 @@
+{
+  "715d7122-c859-43e0-8500-6cfc6a827e6b.jpg": { "name": "PAIMON",     "atk": 15, "def": 15, "sta": 15 },
+  "9ba07c6d-24b5-4a63-a482-398dc980a6f8.jpg": { "name": "DEUS",       "atk": 15, "def": 15, "sta": 15 },
+  "a6894d7c-1b08-49e3-bb7b-6ca2fc61c131.jpg": { "name": "ASMODEUS",   "atk": 15, "def": 15, "sta": 15 },
+  "e7ba3a76-8c6b-451c-aa2c-f64361f1686e.jpg": { "name": "Annihilape", "atk": 15, "def": 13, "sta": 15 },
+  "4646d5fe-4de8-4e2e-a184-d19576fdd5c0.jpg": { "name": "Lugia",      "atk": 15, "def": 13, "sta": 15 },
+  "d3cd0650-91ec-44cc-905d-aacaa405dc0b.jpg": { "name": "Arcanine",   "atk": 13, "def": 14, "sta": 15 },
+  "27e7dd1a-91a9-4888-a313-5ee447eb9e96.jpg": { "name": "Dialga",     "atk": 7,  "def": 9,  "sta": 15 },
+  "e38ea907-af42-4316-80e6-fc43cf32f1b2.jpg": { "name": "Dratini185", "atk": 0,  "def": 2,  "sta": 11 },
+  "20014c0e-597e-4648-b5bd-7f86149bfb81.jpg": { "name": "Scizor",     "atk": 14, "def": 13, "sta": 15 },
+  "b626a058-5010-42f4-8574-d63c5d2e02fb.jpg": { "name": "Dragonite",  "atk": 14, "def": 14, "sta": 12 },
+  "992d1a41-b617-4cff-9bc2-f3e730e6454a.jpg": { "name": "Zekrom",     "atk": 13, "def": 13, "sta": 11 },
+  "b25d1196-85c0-4ab5-82f9-0d065c28b8a9.jpg": { "name": "Beldum",     "atk": 14, "def": 14, "sta": 5  },
+  "97523db4-2719-4e1a-bee4-0f0a827f7845.jpg": { "name": "Muk",        "atk": 9,  "def": 13, "sta": 10 },
+  "87a578c3-20e2-45be-a858-c74fe155ea44.jpg": { "name": "Dratini583", "atk": 14, "def": 5,  "sta": 9  },
+  "3eb996b1-1aac-4fa1-801d-f1c25897c595.jpg": { "name": "Zorua",      "atk": 13, "def": 3,  "sta": 3  }
+}

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head><meta charset="UTF-8"><title>IV Reader — teste integração</title>
+<style>
+body{font-family:monospace;background:#0b0e16;color:#dbe7ff;padding:16px}
+table{border-collapse:collapse;width:100%}
+td,th{border:1px solid #2a3550;padding:4px 8px;text-align:center}
+img{height:120px;display:block}
+.pass{color:#37e29a}.fail{color:#ff5d6c}
+</style></head>
+<body>
+<h1>IV Reader — integração</h1>
+<div id="summary">carregando…</div>
+<table id="tbl"><thead><tr>
+<th>print</th><th>nome</th><th>esperado A/D/H</th><th>lido A/D/H</th><th>status</th>
+</tr></thead><tbody></tbody></table>
+<script src="../docs/iv-reader.js"></script>
+<script>
+const TOL = 1;
+async function loadImg(src){
+  return new Promise((res,rej)=>{const im=new Image();im.onload=()=>res(im);im.onerror=rej;im.src=src;});
+}
+function toCanvas(im){
+  const W=750, H=Math.round(im.height*(750/im.width));
+  const c=document.createElement('canvas');c.width=W;c.height=H;
+  c.getContext('2d').drawImage(im,0,0,W,H);return c;
+}
+(async ()=>{
+  const expected=await fetch('expected.json').then(r=>r.json());
+  const tbody=document.querySelector('#tbl tbody');
+  let pass=0, fail=0; const rows=[];
+  for(const [file,exp] of Object.entries(expected)){
+    let lido={ok:false};
+    try{ lido=IVReader.lerIVdoCanvas(toCanvas(await loadImg(file))); }catch(e){ lido={ok:false,motivo:String(e)}; }
+    let ok=lido.ok;
+    if(ok){
+      for(const k of ['atk','def','sta']){
+        const diff=Math.abs(lido[k]-exp[k]);
+        const hard=(exp[k]===0||exp[k]===15); // barra vazia/cheia: exato
+        if(hard ? diff!==0 : diff>TOL) ok=false;
+      }
+    }
+    ok?pass++:fail++;
+    rows.push({file,name:exp.name,exp:[exp.atk,exp.def,exp.sta],got:lido.ok?[lido.atk,lido.def,lido.sta]:lido.motivo,ok});
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td><img src="${file}"></td><td>${exp.name}</td>
+      <td>${exp.atk}/${exp.def}/${exp.sta}</td>
+      <td>${lido.ok?`${lido.atk}/${lido.def}/${lido.sta}`:('—'+(lido.motivo||''))}</td>
+      <td class="${ok?'pass':'fail'}">${ok?'PASS':'FAIL'}</td>`;
+    tbody.appendChild(tr);
+  }
+  const total=pass+fail;
+  document.getElementById('summary').textContent=`${pass}/${total} PASS, ${fail} FAIL`;
+  window.__ivTestSummary={pass,fail,total,rows};
+  window.__ivTestReady=true;
+})();
+</script>
+</body></html>
