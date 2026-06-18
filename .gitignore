@@ -9,6 +9,10 @@ env/
 .playwright-mcp/
 *.output
 
+# Prints de appraisal: fixtures locais p/ teste de integração.
+# Contêm local/data de captura — não versionar (privacidade).
+samples/*.jpg
+
 # OS
 Thumbs.db
 .DS_Store
