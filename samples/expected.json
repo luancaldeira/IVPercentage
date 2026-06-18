@@ -7,7 +7,7 @@
   "d3cd0650-91ec-44cc-905d-aacaa405dc0b.jpg": { "name": "Arcanine",   "atk": 13, "def": 14, "sta": 15 },
   "27e7dd1a-91a9-4888-a313-5ee447eb9e96.jpg": { "name": "Dialga",     "atk": 7,  "def": 9,  "sta": 15 },
   "e38ea907-af42-4316-80e6-fc43cf32f1b2.jpg": { "name": "Dratini185", "atk": 0,  "def": 2,  "sta": 11 },
-  "20014c0e-597e-4648-b5bd-7f86149bfb81.jpg": { "name": "Scizor",     "atk": 14, "def": 13, "sta": 15 },
+  "20014c0e-597e-4648-b5bd-7f86149bfb81.jpg": { "name": "Scizor",     "atk": 14, "def": 13, "sta": 14 },
   "b626a058-5010-42f4-8574-d63c5d2e02fb.jpg": { "name": "Dragonite",  "atk": 14, "def": 14, "sta": 12 },
   "992d1a41-b617-4cff-9bc2-f3e730e6454a.jpg": { "name": "Zekrom",     "atk": 13, "def": 13, "sta": 11 },
   "b25d1196-85c0-4ab5-82f9-0d065c28b8a9.jpg": { "name": "Beldum",     "atk": 14, "def": 14, "sta": 5  },
